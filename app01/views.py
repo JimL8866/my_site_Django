@@ -46,3 +46,26 @@ def info(req):
     data_list = UserInfo.objects.all()
     print(data_list)
     return render(req, "info.html", {"data_list": data_list})
+
+
+def info_add(req):
+    # get method return to the adding page
+    if req.method == "GET":
+        return render(req, "info_add.html")
+
+    # get user input
+    name = req.POST.get("user")
+    password = req.POST.get("pwd")
+    age = req.POST.get("age")
+
+    # put into db
+    UserInfo.objects.create(name=name, password=password, age=age)
+
+    # redirect to info page
+    return redirect("/info/")
+
+def info_delete(req):
+
+    user_id = req.GET.get("id")
+    UserInfo.objects.filter(user_id=user_id).delete()
+    return redirect("/info")
